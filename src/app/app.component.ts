@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
 
     notes: Note[] = [
         {
-            id: Math.floor(Math.random() * 1000000),
+            id: 0,
             title: 'Заметка 1',
             text: 'Текст заметки 1',
             updated: new Date().toISOString(),
