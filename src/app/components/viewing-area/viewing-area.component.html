@@ -1,0 +1,22 @@
+<div *ngIf="!selectedNote else form" class="preview__message">
+  {{ message | uppercase }}
+</div>
+
+<ng-template #form>
+  <div class="notes__small-updated notes__updated">{{ selectedNote.updated | date: 'short' }}</div>
+
+  <form [formGroup]="noteForm" class="notes__form">
+    <input
+      name="title"
+      formControlName="title"
+      class="notes__title"
+      (blur)="saveEditedNote()"
+    />
+    <textarea 
+      class="notes__body"
+      formControlName="text"
+      name="text"
+      (blur)="saveEditedNote()"
+    ></textarea>
+  </form>
+</ng-template>

@@ -1,0 +1,21 @@
+<app-header [title]="title"></app-header>
+
+<div class="notes">
+
+	<app-sidebar
+		[notes]="notes"
+		(noteSelected)="onSelectNote($event)"
+		(addNewNote)="onAddNewNote()"
+		(deleteNote)="onDeleteNote($event)"
+		class="notes__sidebar"
+	></app-sidebar>
+
+	<app-viewing-area
+		[selectedNote]="selectedNote"
+		[notes]="notes"
+		[noteForm]="noteForm"
+		(saveNote)="onUpdateNote($event)"
+		class="notes__preview"
+	></app-viewing-area>
+
+</div>

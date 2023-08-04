@@ -1,0 +1,31 @@
+
+<div class="notes__list">
+  <button 
+    class="notes__add" 
+    (click)="addNote()"
+    title="Добавить новую заметку"
+  >Добавить заметку
+  <mat-icon>add</mat-icon>
+</button>
+  
+
+  <div 
+    *ngFor="let note of notes" 
+    (click)="selectNote(note)" 
+    routerLinkActive="notes__list-item--selected"
+  >
+    <div [routerLink]="['/notes', note.id]" class="notes__item notes__list-item">
+      <a 
+        class="notes__delete"
+        (click)="deleteSelectedNote(note)"
+        title="Удалить заметку"
+      >
+        <mat-icon>delete_forever</mat-icon>
+      </a>
+
+      <div class="notes__small-title">{{ note.title }}</div>
+      <div class="notes__small-body">{{ checkText(note.text) }}</div>
+      <div class="notes__small-updated">{{ note.updated | date: 'short' }}</div>
+    </div>
+  </div>
+</div>
