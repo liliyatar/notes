@@ -3,7 +3,7 @@
 <div class="notes">
 
 	<app-sidebar
-		[notes]="notes"
+		[notes]="allNotes$ | async"
 		(noteSelected)="onSelectNote($event)"
 		(addNewNote)="onAddNewNote()"
 		(deleteNote)="onDeleteNote($event)"
@@ -12,10 +12,10 @@
 
 	<app-viewing-area
 		[selectedNote]="selectedNote"
-		[notes]="notes"
+		[notes]="allNotes$ | async"
 		[noteForm]="noteForm"
 		(saveNote)="onUpdateNote($event)"
 		class="notes__preview"
 	></app-viewing-area>
 </div>
-
+<router-outlet></router-outlet>

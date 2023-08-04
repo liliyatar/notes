@@ -1,7 +1,12 @@
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Note } from './interfaces';
+import { Store } from '@ngrx/store';
+import { selectAllNotes } from './state/notes/note.selectors';
+import { addNote, loadNotes, removeNote, updateNote } from './state/notes/note.actions';
+import { AppState } from './state/app.state';
+import { Location } from '@angular/common'; 
 
 @Component({
     selector: 'app-root',
@@ -9,30 +14,20 @@ import { Note } from './interfaces';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    title = 'заметки';
+    public allNotes$ = this.store.select(selectAllNotes);
 
-    notes: Note[] = [
-        {
-            id: 0,
-            title: 'Заметка 1',
-            text: 'Текст заметки 1',
-            updated: new Date().toISOString(),
-        },
-        {
-            id: Math.floor(Math.random() * 1000000),
-            title: 'Заметка 2',
-            text: 'Текст заметки 2',
-            updated: new Date().toISOString(),
-        },
-    ];
+    title = 'заметки';
 
     noteForm: FormGroup;
     
-    selectedNote!: Note | null;
+    selectedNote: any;
 
     constructor(
         private fb: FormBuilder,
-        private route: ActivatedRoute
+        private store: Store<AppState>,
+        private location: Location,
+        private route: ActivatedRoute,
+        private cd: ChangeDetectorRef,
     ) {
         this.noteForm = this.fb.group({
             id: [''],
@@ -43,17 +38,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        const storedNotes = localStorage.getItem('notes');
-        this.notes = storedNotes ? JSON.parse(storedNotes) : this.notes;
-        const noteId = Number(this.route.snapshot.paramMap.get('id'));
-        const note = this.notes.find(note => note.id == noteId);
-        this.sortNotes();
-        if (this.notes.length) {
-            this.sortNotes();
-        }
-        if (note) {
-            this.onSelectNote(note);
-        }
+        this.store.dispatch(loadNotes());
     }
 
     onSelectNote(note: Note) {
@@ -62,42 +47,26 @@ export class AppComponent implements OnInit {
     }
 
     onAddNewNote() {
-        const newNote = {
+        const note: Note = {
             id: Math.floor(Math.random() * 1000000),
             title: 'Введите заголовок',
             text: 'Введите текст заметки',
             updated: new Date().toISOString(),
         };
-        this.notes.push(newNote);
-        this.selectedNote = newNote;
-        this.sortNotes();
-    }
 
-    sortNotes() {
-        this.notes = [...this.notes.sort((a, b) => {
-            return new Date(a.updated) > new Date(b.updated) ? -1 : 1;
-        })];
-        this.saveNotesToLocalStorage();
-    }
-
-    onDeleteNote(noteToDelete: any) {
-        const newNotes = this.notes.filter(note => note.id != noteToDelete.id);
-        this.notes = [...newNotes];
-        this.saveNotesToLocalStorage();
+        this.store.dispatch(addNote({ note }));
         this.selectedNote = null;
     }
 
-    onUpdateNote(editedNote: any) {
-        const existing = this.notes.find(note => note.id == editedNote.id);
-        if (existing) {
-            existing.title = editedNote.title;
-            existing.text = editedNote.text;
-            existing.updated = new Date().toISOString();
-        }
-        this.sortNotes();
+
+    onDeleteNote(noteToDelete: any) {
+        this.store.dispatch(removeNote({ id: noteToDelete.id }));
+        this.selectedNote = null;
+        this.location.replaceState('/');
     }
 
-    private saveNotesToLocalStorage() {
-        localStorage.setItem('notes', JSON.stringify(this.notes));
+    onUpdateNote(note: any) {
+        this.store.dispatch(updateNote({ note }));
     }
 }
+

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Note } from './../../interfaces';
+import { Location } from '@angular/common'; 
 
 @Component({
   selector: 'app-sidebar',
@@ -7,15 +8,17 @@ import { Note } from './../../interfaces';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  @Input() notes: Note[] = [];
+  @Input() notes: any;
 
   @Output() noteSelected = new EventEmitter<Note>();
   @Output() deleteNote = new EventEmitter<Note>();
   @Output() addNewNote = new EventEmitter<void>();
   
-  MAX_TEXT_LENGTH = 60;
+  MAX_TEXT_LENGTH = 30;
 
-  constructor() { }
+  constructor(
+    private location: Location,
+  ) { }
 
   ngOnInit() {}
 
@@ -25,6 +28,7 @@ export class SidebarComponent implements OnInit {
 
   addNote() {
     this.addNewNote.emit();
+    this.location.replaceState('/');
   }
 
   deleteSelectedNote(note: Note) {

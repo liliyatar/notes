@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Note } from './../../interfaces';
@@ -9,7 +10,7 @@ import { Note } from './../../interfaces';
 })
 export class ViewingAreaComponent implements OnInit {
   @Input() selectedNote: any;
-  @Input() notes: any[] = [];
+  @Input() notes: any;
   @Input() noteForm!: FormGroup;
 
   @Output() saveNote = new EventEmitter<void>();
@@ -18,18 +19,27 @@ export class ViewingAreaComponent implements OnInit {
 
   editedNote!: Note;
 
-  constructor() {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
+    const noteId = Number(this.route.snapshot.paramMap.get('id'));
+    const note = this.notes.find((item: Note) => item.id == noteId);
+
+    if (note) {
+      this.selectedNote = note;
+    }
+
     this.editedNote = { ...this.selectedNote };
     this.noteForm.patchValue(this.editedNote)
   }
 
   saveEditedNote() {
-    this.selectedNote.title = this.noteForm.value.title;
-    this.selectedNote.text = this.noteForm.value.text;
-    this.selectedNote.updated = new Date().toISOString();
+    const note = {
+      ...this.selectedNote,
+      title: this.noteForm.value.title,
+      text: this.noteForm.value.text
+    }
 
-    this.saveNote.emit(this.selectedNote);
+    this.saveNote.emit(note);
   }
 }
