@@ -1,1 +1,1 @@
-[DEMO](https://liliyatar.github.io/notes/)
+[DEMO](https://liliyatar.github.io/notes_app/)
