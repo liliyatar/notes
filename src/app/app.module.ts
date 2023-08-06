@@ -13,8 +13,7 @@ import { NoteEffects } from './state/notes/note.effects';
 import { noteReducer } from './state/notes/note.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { RouteReuseStrategy } from '@angular/router';
-import { IonicRouteStrategy } from '@ionic/angular';
+
 @NgModule({
   declarations: [
     AppComponent,

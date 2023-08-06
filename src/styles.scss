@@ -95,11 +95,11 @@ body {
 
 	&__title,
 	&__body {
-			border: none;
-			outline: none;
-			width: 100%;
-			background-color: #242323;
-		}
+		border: none;
+		outline: none;
+		width: 100%;
+		background-color: #242323;
+	}
 
 	&__title {
     font-size: 30px;
@@ -108,12 +108,12 @@ body {
 	}
 
 	&__body {
-			flex-grow: 1;
-			font-size: 1.2em;
-			line-height: 1.5;
-			margin-top: 2em;
-			resize: none;
-			color: #fff;
+		flex-grow: 1;
+		font-size: 1.2em;
+		line-height: 1.5;
+		margin-top: 2em;
+		resize: none;
+		color: #fff;
 	}
 
 	&__form {
@@ -134,4 +134,27 @@ body {
 
 .material-icons {
 	font-family: 'Material Icons';
+}
+
+
+@media (max-width: 767.98px) {
+	.notes {
+		flex-direction: column;
+
+		&__add {
+			font-size: 17px;
+		}
+
+		&__sidebar {
+			width: auto;
+		}
+
+		&__title {
+			font-size: 22px;
+		}
+
+		&__body {
+			font-size: 16px;
+		}
+	}
 }
